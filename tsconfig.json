@@ -18,7 +18,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "declaration": true, // 是否输出声明文件
+    "declarationDir": "build/types" // 声明文件输出地址
   },
   "include": [
     "src"
