@@ -8,24 +8,23 @@ import { useEffect, useRef } from "react";
  * @param mapInstance mapbox 实例
  * @param options 配置项
  */
-const mapboxFitBounds =
-  (mapInstance: mapboxgl.Map | null) =>
-  (
-    coordinates: [number, number][],
-    options: mapboxgl.FitBoundsOptions = {
-      padding: 50,
+const mapboxFitBounds = (
+  mapInstance: mapboxgl.Map | null,
+  coordinates: [number, number][],
+  options: mapboxgl.FitBoundsOptions = {
+    padding: 50,
+  }
+) => {
+  if (mapInstance) {
+    // Create a 'LngLatBounds' with both corners at the first coordinate.
+    const bounds = new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]);
+    // Extend the 'LngLatBounds' to include every coordinate in the bounds result.
+    for (const coord of coordinates) {
+      bounds.extend(coord);
     }
-  ) => {
-    if (mapInstance) {
-      // Create a 'LngLatBounds' with both corners at the first coordinate.
-      const bounds = new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]);
-      // Extend the 'LngLatBounds' to include every coordinate in the bounds result.
-      for (const coord of coordinates) {
-        bounds.extend(coord);
-      }
-      mapInstance.fitBounds(bounds, options);
-    }
-  };
+    mapInstance.fitBounds(bounds, options);
+  }
+};
 
 /**
  * 实例挂载 antv/l7 + mapbox
@@ -74,7 +73,6 @@ export const useMapbox = (
 
     return () => {
       // 组件销毁的同时，删除实例
-      mapbox.current?.remove();
       scene.current?.destroy();
     };
   }, []);
@@ -82,6 +80,6 @@ export const useMapbox = (
   return {
     mapbox,
     scene,
-    fitBounds: mapboxFitBounds(mapbox.current),
+    fitBounds: mapboxFitBounds,
   };
 };
